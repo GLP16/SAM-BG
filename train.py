@@ -23,7 +23,7 @@ from torch.utils.data import Dataset, DataLoader
 from torch.utils.data import ConcatDataset
 
 sys.path.append(os.path.abspath('/T2007061/pgl/pgl_experiment/'))
-from model.sam.networks.sam_multi_lora_128_boundary_swiss3 import build_sam_vit_b_adapter_linknet_multi_lora
+from model.sam.networks.sam_multi_lora_128 import build_sam_vit_b_adapter_linknet_multi_lora
 
 class ModelEMA:
     def __init__(self, model, decay=0.999):
@@ -72,11 +72,11 @@ class ModelEMA:
 class Args:
     def __init__(self):
         self.name = 'b_adapter_sam_multi_lora32_sp24'
-        self.SAM_pretrained_path = '/T2007061/pgl/pgl_experiment/model/sam/sam_vit_b_01ec64.pth'
-        self.log_dir = '/T2007061/pgl/pgl_experiment/record/SAM_256'
-        self.weight_dir = '/T2007061/pgl/pgl_experiment/weight/SAM_256_5000_250001'
-        self.record_dir = '/T2007061/pgl/pgl_experiment/record/SAM_256_5000_250001'
-        self.viz_dir = '/T2007061/pgl/pgl_experiment/viz/SAM_256_5000_250001'
+        self.SAM_pretrained_path = 'sam_vit_b_01ec64.pth'
+        self.log_dir = ''
+        self.weight_dir = ''
+        self.record_dir = ''
+        self.viz_dir = ''
         self.image_size = 256
         self.seed = 2333
         self.base_lr = 4e-4
@@ -98,9 +98,9 @@ class Args:
         self.b_beta = 1.0
         self.lambda_seg = 0.7
         self.lambda_bnd = 0.3
-        self.train_dir = "/T2007061/pgl/pgl_experiment/data/256_5000_25000/train"
-        self.val_dir = "/T2007061/pgl/pgl_experiment/data/256_5000_25000/val"
-        self.test_dir = "/T2007061/pgl/pgl_experiment/data/256_5000_25000/test"
+        self.train_dir = ""
+        self.val_dir = ""
+        self.test_dir = ""
         self.crop_size = (256, 256)
         self.scheduler_t_max = 60
         self.scheduler_eta_min = 1e-8
