@@ -22,9 +22,10 @@ dataset
      ├── label
 ```
 ### III. Weights Download 
-The download address for SAM's pre-trained ViT-B weights is:
-https://huggingface.co/datasets/Gourieff/ReActor/blob/main/models/sams/sam_vit_b_01ec64.pth
+The download address for SAM's pre-trained ViT-B weights is: https://huggingface.co/datasets/Gourieff/ReActor/blob/main/models/sams/sam_vit_b_01ec64.pth
+. Place the weights in the project root directory for subsequent training.
 ### Ⅳ. Training
+To train the model, simply run `train.py` directly.
 ```bash
 python train.py
 ```
