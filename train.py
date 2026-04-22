@@ -95,6 +95,7 @@ class Args:
         self.train_dir = "TRAIN_DIR"
         self.val_dir = "VAL_DIR"
         self.test_dir = "TEST_DIR"
+        self.viz_dir = "VIZ_DIR"
         self.crop_size = '(IMAGE_SIZE, IMAGE_SIZE)'
         self.scheduler_t_max = 60
         self.scheduler_eta_min = 1e-8
@@ -353,6 +354,14 @@ def validate_epoch(model, dataloader, device):
     return epoch_loss, precision, recall, f1, iou
 
 
+def resize_to_original(pred, original_size):
+    w, h = int(original_size[0]), int(original_size[1])
+    pred_uint8 = (pred * 255).astype(np.uint8)
+    pred_pil = Image.fromarray(pred_uint8)
+    pred_resized = pred_pil.resize((w, h), Image.NEAREST)
+    return np.array(pred_resized) / 255.0
+
+
 def test_epoch(model, dataloader, device):
     model.eval()
     running_loss = 0.0
@@ -382,7 +391,7 @@ def test_epoch(model, dataloader, device):
     all_targets = torch.cat(all_targets, dim=0)
     seg_precision, seg_recall, seg_f1, seg_iou = calculate_metrics(all_seg_preds, all_targets)
     print(f'\nSegmentation metrics: Precision: {seg_precision:.4f} | Recall: {seg_recall:.4f} | F1: {seg_f1:.4f} | IoU: {seg_iou:.4f}')
-    return epoch_loss, seg_precision, seg_recall, seg_f1, seg_iou
+    return epoch_loss, seg_precision, seg_recall, seg_f1, seg_iou, all_seg_preds
 
 
 def main():
@@ -391,8 +400,11 @@ def main():
     print(f"TRAIN_DIR: {args.train_dir}")
     print(f"VAL_DIR  : {args.val_dir}")
     print(f"TEST_DIR : {args.test_dir}")
+    print(f"VIZ_DIR  : {args.viz_dir}")
     print(f"BATCH_SIZE: {args.batch_size}")
     print("=" * 80 + "\n")
+
+    os.makedirs(args.viz_dir, exist_ok=True)
 
     transform = transforms.Compose([
         transforms.ToTensor(),
@@ -483,11 +495,35 @@ def main():
         print(f"\n--- Evaluating the best model on the test set (run {run_idx+1}) ---")
         model.load_state_dict(best_model_wts)
 
-        test_loss, test_precision, test_recall, test_f1, test_iou = test_epoch(model, test_loader, DEVICE)
+        test_loss, test_precision, test_recall, test_f1, test_iou, seg_preds = test_epoch(model, test_loader, DEVICE)
 
         print(f'\nTest results for run {run_idx + 1}: Test Loss: {test_loss:.4f} | '
               f'Precision: {test_precision:.4f} | Recall: {test_recall:.4f} | '
               f'F1: {test_f1:.4f} | IoU: {test_iou:.4f}')
+
+        print(f"\nGenerating prediction maps for run {run_idx+1}...")
+        model.eval()
+        with torch.no_grad():
+            for batch_idx, (inputs, targets, bnd_targets, original_sizes) in enumerate(tqdm(test_loader, desc="Generating visualizations")):
+                start_idx = batch_idx * args.batch_size
+                end_idx = start_idx + inputs.size(0)
+                if start_idx >= len(seg_preds):
+                    continue
+                seg_batch = seg_preds[start_idx:end_idx]
+                for i in range(inputs.size(0)):
+                    global_idx = batch_idx * args.batch_size + i
+                    if global_idx >= len(test_dataset.img_list):
+                        continue
+                    original_size_i = original_sizes[i]
+                    seg_img = seg_batch[i].float().numpy().squeeze()
+                    seg_img = np.clip(seg_img, 0, 1)
+                    seg_img_resized = resize_to_original(seg_img, original_size_i)
+                    seg_uint8 = (seg_img_resized * 255).astype(np.uint8)
+                    seg_pil = Image.fromarray(seg_uint8)
+                    file_name = test_dataset.img_list[global_idx]
+                    save_path = os.path.join(args.viz_dir, f"run_{run_idx+1}_{file_name}")
+                    seg_pil.save(save_path)
+        print(f'\nSaved prediction maps for run {run_idx+1} to: {args.viz_dir}')
 
         test_run_metrics.append({
             'run': run_idx + 1,
