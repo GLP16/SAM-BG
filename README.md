@@ -8,7 +8,8 @@ This repository is the code implementation of the paper "A visual transformer an
 pip install -r requirements.txt
 ```
 ### II. Dataset Structure
-The authors do not have permission to share the OSM-Stuttgar data used in this study. The Swisstopo-Zurich dataset is publicly available from the Swiss Federal Office of Topography at https://www.swisstopo.admin.ch/de. The data structure is as follows:
+Due to licensing restrictions on the synthetic dataset used in this study, the full dataset cannot be shared. The Swiss dataset is publicly available from the Swiss Federal Office of Topography (swisstopo): the 1:10,000 dataset can be accessed at https://www.swisstopo.admin.ch/fr/carte-nationale-swiss-map-vector-10
+, and the 1:25,000 dataset can be accessed at https://www.swisstopo.admin.ch/fr/carte-nationale-swiss-map-vector-25. The data structure is as follows:
 ```
 dataset
 ├── train
