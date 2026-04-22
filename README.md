@@ -1,13 +1,27 @@
-<h2 align="center">A visual transformer and multi-task learning framework for building generalization from raster maps </h2>
+<h1 align="center">A visual transformer and multi-task learning framework for building generalization from raster maps </h1>
 This repository is the code implementation of the paper "A visual transformer and multi-task learning framework for building generalization from raster maps"
 
-<h3 align="left"><b>Step-by-step guides</b></h3>
+## Overview
 
-### I. Install dependencies:
+SAM-BG is a building generalization framework designed to transform detailed raster building maps into simplified representations suitable for smaller-scale urban topographic mapping. It leverages a fine-tuned vision transformer and a multi-task architecture with explicit boundary enhancement to reduce contour distortion and improve geometric consistency, offering an end-to-end solution for multi-scale cartographic representation.
+
+## Key Features
+
+- **LoRA-based ViT Adaptation**: Efficiently fine-tunes the SAM vision transformer encoder with low-rank adaptation, enabling the transfer of global representation capability to raster building generalization.
+
+- **Multi-task Learning Framework**: Jointly optimizes building generalization and contour prediction to alleviate contour distortion and improve the quality of simplified building representations.
+
+- **Boundary Feature Enhancement Module**: Reinforces boundary responses through dual-source guided gating and multiscale feature pyramids to better preserve building contours.
+
+- **Multi-scale Validation**: Demonstrates superior performance on synthetic and real-world datasets across different scales, especially on boundary-sensitive building metrics.
+
+## Step-by-step guides
+
+#### I. Install dependencies:
 ```bash
 pip install -r requirements.txt
 ```
-### II. Dataset Structure
+#### II. Dataset Structure
 Due to licensing restrictions on the synthetic dataset used in this study, the full dataset cannot be shared. The Swiss datasets are publicly available from the Swiss Federal Office of Topography (swisstopo). The 1:10,000 dataset can be accessed at
 https://www.swisstopo.admin.ch/fr/carte-nationale-swiss-map-vector-10,
 and the 1:25,000 dataset can be accessed at
@@ -36,11 +50,11 @@ dataset
      ├── img
      ├── label
 ```
-### III. Weights Download 
+#### III. Weights Download 
 The download address for SAM's pre-trained ViT-B weights is: https://huggingface.co/datasets/Gourieff/ReActor/blob/main/models/sams/sam_vit_b_01ec64.pth
 . Place the weights in the project root directory for subsequent training.
-### Ⅳ. Training
-To train the model, simply run `train.py` directly.
+#### Ⅳ. Training and Visualization
+To train the model, simply run train.py directly. After training is completed, visualization results will be generated automatically.
 ```bash
 python train.py
 ```
