@@ -95,6 +95,7 @@ class Args:
         self.train_dir = "TRAIN_DIR"
         self.val_dir = "VAL_DIR"
         self.test_dir = "TEST_DIR"
+        self.weight_dir = "WEIGHT_DIR"
         self.viz_dir = "VIZ_DIR"
         self.crop_size = '(IMAGE_SIZE, IMAGE_SIZE)'
         self.scheduler_t_max = 60
@@ -400,10 +401,12 @@ def main():
     print(f"TRAIN_DIR: {args.train_dir}")
     print(f"VAL_DIR  : {args.val_dir}")
     print(f"TEST_DIR : {args.test_dir}")
-    print(f"VIZ_DIR  : {args.viz_dir}")
     print(f"BATCH_SIZE: {args.batch_size}")
+    print(f"weight_dir: {args.weight_dir}")
+    print(f"viz_dir   : {args.viz_dir}")
     print("=" * 80 + "\n")
 
+    os.makedirs(args.weight_dir, exist_ok=True)
     os.makedirs(args.viz_dir, exist_ok=True)
 
     transform = transforms.Compose([
@@ -500,6 +503,10 @@ def main():
         print(f'\nTest results for run {run_idx + 1}: Test Loss: {test_loss:.4f} | '
               f'Precision: {test_precision:.4f} | Recall: {test_recall:.4f} | '
               f'F1: {test_f1:.4f} | IoU: {test_iou:.4f}')
+
+        per_run_model_path = os.path.join(args.weight_dir, f'run_{run_idx+1}_best_by_boundary_iou.pth')
+        torch.save(best_model_wts, per_run_model_path)
+        print(f'Saved best model for run {run_idx+1} to: {per_run_model_path}')
 
         print(f"\nGenerating prediction maps for run {run_idx+1}...")
         model.eval()
