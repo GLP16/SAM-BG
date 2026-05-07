@@ -29,10 +29,10 @@ SAM-BG builds on a  important observation: building generalization is not only a
 pip install -r requirements.txt
 ```
 #### II. Dataset Structure
-Due to licensing restrictions on the synthetic dataset used in this study, the full dataset cannot be shared. The Swiss datasets are publicly available from the Swiss Federal Office of Topography (swisstopo). The 1:10,000 dataset can be accessed at
-https://www.swisstopo.admin.ch/fr/carte-nationale-swiss-map-vector-10,
-and the 1:25,000 dataset can be accessed at
-https://www.swisstopo.admin.ch/fr/carte-nationale-swiss-map-vector-25. 
+Due to licensing restrictions on the synthetic dataset used in this study, the full synthetic dataset cannot be shared. The original Swiss vector datasets used in this study are publicly available from the Swiss Federal Office of Topography, swisstopo. The 1:10,000 original vector dataset can be accessed at https://www.swisstopo.admin.ch/fr/carte-nationale-swiss-map-vector-10
+, and the 1:25,000 original vector dataset can be accessed at https://www.swisstopo.admin.ch/fr/carte-nationale-swiss-map-vector-25
+. Supporting data for this study have been deposited in figshare and are available at https://doi.org/10.6084/m9.figshare.32194734
+.
 
 After rasterizing the vector data, run the following scripts in the data_process folder sequentially:
 ```bash
