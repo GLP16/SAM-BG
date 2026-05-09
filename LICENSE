@@ -1,0 +1,17 @@
+Data License
+
+The rasterized real-world datasets generated and analyzed in this study, together with the accompanying documentation provided in this repository, are released under the Creative Commons Attribution 4.0 International (CC BY 4.0) license.
+
+Dataset DOI: https://doi.org/10.6084/m9.figshare.32194734
+
+These datasets were derived from the original Swiss Map Vector 10 and Swiss Map Vector 25 products provided by the Federal Office of Topography swisstopo:
+
+Swiss Map Vector 10: https://www.swisstopo.admin.ch/fr/carte-nationale-swiss-map-vector-10
+
+Swiss Map Vector 25: https://www.swisstopo.admin.ch/fr/carte-nationale-swiss-map-vector-25
+
+The original swisstopo vector datasets are not redistributed in this repository. Users who need the original vector data should obtain them directly from swisstopo and comply with swisstopo’s terms of use and source attribution requirements.
+
+Required attribution for the original Swiss vector datasets:
+
+Federal Office of Topography swisstopo
